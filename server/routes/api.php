@@ -20,6 +20,7 @@ use App\Http\Controllers\UserController;
 // });
 
 Route::post("/register", [UserController::class, 'register']);
+Route::post("/verify", [UserController::class, 'verify']);
 Route::post("/login", [UserController::class, 'login']);
 
 

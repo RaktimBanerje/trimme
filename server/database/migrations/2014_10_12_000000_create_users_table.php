@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('nickname')->nullable();
             $table->string('email')->unique();
             $table->string('phone')->unique();
+            $table->string('address')->nullable();
             $table->string('image')->nullable();
             $table->string('gender');
             $table->timestamp('email_verified_at')->nullable();
@@ -26,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->enum('role', ['CUSTOMER', 'BARBAR', 'ADMIN']);
             $table->boolean("is_approve")->default(false);
             $table->boolean("is_active")->default(false);
+            $table->boolean("verified")->default(false);
             $table->string("otp")->nullable();
             $table->date("otp_expired_at")->nullable();
             $table->rememberToken();

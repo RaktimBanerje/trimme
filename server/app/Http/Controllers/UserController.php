@@ -7,6 +7,8 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use \Illuminate\Http\Response;
 use \Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OTPVerification;
 use Validator;
 use Auth;
 
@@ -93,15 +95,42 @@ class UserController extends Controller
             "password" => bcrypt($request->password)
         ]);
 
-        // $token = $user->createToken('trimmeapp');
-
-        // return response([ 'user' => $user, 'token' => $token->plainTextToken]);
-
         if($user) {
+
+            $otp = mt_rand(1111,9999);
+
+            $user->otp = $otp;
+            $user->save();
+
+            Mail::to($user)->send(new OTPVerification($user->name, $otp));
+
             return response(["user" => $user, 'registered' => true]);
         }
         else {
-            return response(["user" => null, 'registered' => false]);
+            return response(["user" => null, 'registered' => false], 500);
+        }
+    }
+
+    public function verify (Request $request) {
+        $otp = $request->otp;
+        $email = $request->email;
+
+        if($otp) {
+            $user = User::where("email", $email)->first();
+            
+            if($user && ($user->otp == $otp)) {
+                $user->otp = "";
+                $user->verified = true;
+                $user->save();
+
+                return response(["user" => $user, 'verified' => true]);
+            }
+            else {
+                return response(["user" => null, "verified" => false]);
+            }
+        }
+        else {
+            return response(["user" => null, "verified" => false]);
         }
     }
 
@@ -119,6 +148,11 @@ class UserController extends Controller
 
         if(Auth::attempt(["phone" => $input['phone'], "password" => $input['password']])) {
             $user = Auth::user();
+
+            if(!$user->verified) {
+                return response(["user" => $user, 'error' => "You are not authenticated"], 401);
+            }
+
             $token = $user->createToken('trimmeapp');
 
             return response(["user" => $user, 'token' => $token->plainTextToken, "error" => false]);

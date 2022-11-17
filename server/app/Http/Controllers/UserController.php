@@ -82,7 +82,7 @@ class UserController extends Controller
         ]);
 
         if($validation->fails()) {
-            return response()->json(['errors' => $validation->errors()->all()], 422);
+            return response()->json(['errors' => $validation->errors()->all()], 400);
         }
 
         $user = User::create([
@@ -92,7 +92,8 @@ class UserController extends Controller
             "email" => $request->email,
             "phone" => $request->phone,
             "gender" => $request->gender,
-            "password" => bcrypt($request->password)
+            "password" => bcrypt($request->password),
+            "address" => $request->address
         ]);
 
         if($user) {
@@ -143,7 +144,7 @@ class UserController extends Controller
         ]);
 
         if($validation->fails()) {
-            return response()->json(['errors' => $validation->errors()->all()], 422);
+            return response()->json(['errors' => $validation->errors()->all()], 400);
         }
 
         if(Auth::attempt(["phone" => $input['phone'], "password" => $input['password']])) {

@@ -34,6 +34,15 @@
       "eas": {
         "projectId": "e4ba82c6-4ba9-4be9-8f7a-b02e04717e70"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Camera and Gallery permission are require",
+          "cameraPermission": "Camera and Gallery permission are require"
+        }
+      ]
+    ]
   }
 }

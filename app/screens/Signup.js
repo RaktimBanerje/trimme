@@ -4,21 +4,29 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Input } from '@rneui/base';
 import { Dropdown } from 'react-native-element-dropdown';
 import { AntDesign } from '@expo/vector-icons'; 
+import axios from 'axios';
+import * as  ImagePicker from 'expo-image-picker'
 
 const Signup = ({route, navigation}) => {
 
   const {role} = route.params
   const [submitting, setSubmitting] = React.useState(false)
+  const [isSuccess, setIsSuccess] = React.useState(false)
+  const [isFailed, setIsFailed] = React.useState(false)
+  const [hasErr, setHasErr] = React.useState(false)
+  const [err, setErr] = React.useState("")
+  const [image, setImage] = React.useState(null)
 
   const [formData, setData] = React.useState({
-    role: "",
+    role: role,
     image: "",
-    fullname: "",
+    name: "",
     nickname: "",
     email: "",
     phone: "",
     address: "",
-    gender: ""
+    gender: "",
+    paddword: ""
   })
 
   const data = [
@@ -26,29 +34,64 @@ const Signup = ({route, navigation}) => {
     { label: 'Female', value: 'female' },
     { label: 'Other', value: 'other' },
   ]
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [3, 3],
+      quality: 1
+    })
+
+    if(!result.canceled) {
+      setImage(result.assets[0].uri)
+    }
+  }
   
-  const send = () => {
+  const send = async () => {
       setSubmitting(true)
-      console.log(formData)
+      try {
+        const response = await axios.post("http://10.0.2.2:8000/api/register", formData)
+        console.log(response.data)
+      }
+      catch(err) {
+        console.log(err.response.data)  
+      }
   }
 
   React.useEffect(() => {
-    setSubmitting(formData => ({...formData, role}))
-  }, [])
+    console.log(formData)
+  }, [formData])
+
+  React.useEffect(() => console.log(image), [image])
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
         <View>
 
           <AntDesign name="left" size={24} color="black" onPress={() => navigation.goBack()}/>
 
           <View style={styles.topFrame}>
-            <TouchableOpacity activeOpacity={0.5} style={styles.photoUpload}>
-              <Image
-                resizeMode="cover"
-                source={require("../assets/akariconsimage.png")}
-              />
+            <TouchableOpacity activeOpacity={0.5} style={styles.photoUpload} onPress={pickImage}>
+              {
+                image ? (
+                  <Image
+                    style={{height: 115, width: 115, borderRadius: 100}}
+                    resizeMode="cover"
+                    source={{uri: image}}
+                  />
+                ) : (
+                  <Image
+                    resizeMode="cover"
+                    source={require("../assets/akariconsimage.png")}
+                  />
+                )
+              }
+  
             </TouchableOpacity>
           </View>
 
@@ -60,7 +103,7 @@ const Signup = ({route, navigation}) => {
             inputContainerStyle={styles.inputContainerStyle}
             inputStyle={styles.inputStyle}
             errorStyle={styles.errorStyle}
-            onChangeText={(text) => setData(formData => ({...formData, fullname: text}))}
+            onChangeText={(text) => setData(formData => ({...formData, name: text}))}
           />
           <Input 
             placeholder="Nick name"
@@ -87,6 +130,14 @@ const Signup = ({route, navigation}) => {
             onChangeText={(text) => setData(formData => ({...formData, phone: text}))}
           />
           <Input 
+            placeholder="Password"
+            containerStyle={styles.containerStyle}
+            inputContainerStyle={styles.inputContainerStyle}
+            inputStyle={styles.inputStyle}
+            errorStyle={styles.errorStyle}
+            onChangeText={(text) => setData(formData => ({...formData, password: text}))}
+          />
+          <Input 
             placeholder="Current Address"
             containerStyle={styles.containerStyle}
             inputContainerStyle={styles.inputContainerStyle}
@@ -110,7 +161,7 @@ const Signup = ({route, navigation}) => {
               onChange={item => setData(formData => ({...formData, gender: item.value}))}
             />
           </View>
-          <Button buttonStyle={styles.buttonStyle} onPress={() => send()} loading={submitting}>Sign Up</Button>
+          <Button buttonStyle={styles.buttonStyle} onPress={() => send()} loading={false}>Sign Up</Button>
           <View style={styles.loginFrame}>
               <Text style={styles.hasAccountText}>Already have an account? </Text>
               <Text style={styles.signinText}>Sign in</Text>

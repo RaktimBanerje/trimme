@@ -29,7 +29,8 @@ class User extends Authenticatable
         'otp_expired_at',
         'password',
         'is_approve',
-        'is_active'
+        'is_active',
+        "address"
     ];
 
     /**

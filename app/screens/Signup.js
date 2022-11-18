@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, ScrollView, StyleSheet, Text, Touchable, View, TouchableOpacity } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Input } from '@rneui/base';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -161,7 +161,7 @@ const Signup = ({route, navigation}) => {
               onChange={item => setData(formData => ({...formData, gender: item.value}))}
             />
           </View>
-          <Button buttonStyle={styles.buttonStyle} onPress={() => send()} loading={false}>Sign Up</Button>
+          <Button buttonStyle={styles.buttonStyle} onPress={() => send()} loading={submitting} disabled={submitting}>Sign Up</Button>
           <View style={styles.loginFrame}>
               <Text style={styles.hasAccountText}>Already have an account? </Text>
               <Text style={styles.signinText}>Sign in</Text>

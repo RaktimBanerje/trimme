@@ -5,20 +5,66 @@ import SafeAreaView from 'react-native-safe-area-view'
 import { AntDesign } from '@expo/vector-icons'; 
 import { Feather } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import axios from 'axios';
+import { REACT_APP_API_URI } from "@env"
 
-const EmailLogin = () => {
+const EmailLogin = ({navigation}) => {
+
+  const [email, setEmail] = React.useState("")
+  const [isSubmitting, setSubmitting] = React.useState(false)
+  const [hasError, setHasError] = React.useState(false)
+  const [error, setError] = React.useState([])
+
+  const send = async () => {
+    setSubmitting(true)
+    setHasError(false)
+    setError(false)
+    try {
+      const response = await axios.post(`${REACT_APP_API_URI}/api/user/login`, {email})
+      setSubmitting(false)
+      if(response.status === 200) {
+        navigation.navigate("OTPVerification", {email})
+      }
+    }
+    catch(err) {
+      console.log(err)
+      setSubmitting(false)
+      setError([])
+      if(err.response.status === 400) {
+        setHasError(true)
+        setError(err.response.data.errors)
+      }
+      else if (err.response.status === 401) {
+        setHasError(true)
+        setError([err.response.data.error])
+      }
+      else {
+        setHasError(true)
+        setError(["Oops, something went wrong"])
+      }
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.loginContainer}>
           <Text h3 h3Style={styles.loginText}>Log In</Text>
+          {hasError && (
+            <View style={{backgroundColor: "#fb5151", padding: 8, marginVertical: 15, marginHorizontal: 12, borderRadius: 4}}>
+              {error.map((err, index) => (
+                <Text key={index} style={{color: "white", fontSize: 16}}>{err}</Text>
+              ))}
+            </View>
+          )}
           <Input 
               placeholder='Email Address'
               inputContainerStyle={styles.inputContainerStyle}
               inputStyle={styles.inputStyle}
               leftIcon={<MaterialCommunityIcons name="email-outline" size={24} color="black" />}
               leftIconContainerStyle={styles.leftIconContainerStyle}
+              onChangeText={setEmail}
           />
-          <Button buttonStyle={styles.primaryButtonStyle}>Log In</Button>
+          <Button buttonStyle={styles.primaryButtonStyle} loading={isSubmitting} disabled={isSubmitting} onPress={() => send()}>Log In</Button>
           <View style={styles.dividerText}>
             <Text style={styles.dividerTextStyle}>Or</Text>
           </View>
@@ -33,7 +79,7 @@ const EmailLogin = () => {
           </TouchableOpacity>
           <View style={styles.signupFrame}>
               <Text style={styles.noAccountText}>Don't have an account? </Text>
-              <Text style={styles.signupText}>Sign Up</Text>
+              <Text style={styles.signupText} onPress={() => navigation.navigate("SignupChoice")}>Sign Up</Text>
           </View>
       </View>
     </SafeAreaView>

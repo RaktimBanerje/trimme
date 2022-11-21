@@ -3,8 +3,16 @@ import { Button, Input, Text } from "@rneui/base"
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons'; 
+import axios from "axios"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { REACT_APP_API_URI } from "@env"
 
-const OTPVerification = () => {
+const OTPVerification = ({route, navigation}) => {
+
+    const {email} = route.params
+
+    const [hasError, setHasError] = React.useState(false)
+    const [error, setError] = React.useState(false)
 
     const pin1Ref = useRef(null)
     const pin2Ref = useRef(null)
@@ -18,18 +26,45 @@ const OTPVerification = () => {
 
     const [submitting, setSubmitting] = React.useState(false)
 
-    const submit = () => {
+    const submit = async () => {
         setSubmitting(true)
         const otp = `${pin1}${pin2}${pin3}${pin4}`
-        console.log(otp)
+        try {
+            setSubmitting(false)
+            const response = await axios.post(`${REACT_APP_API_URI}/api/user/verify`, {email, otp})
+            if(response.status === 200) {
+                await AsyncStorage.setItem("user", JSON.stringify(response.data.user))
+                await AsyncStorage.setItem("token", response.data.token)
+                navigation.navigate("MainScreen")
+            }
+          }
+          catch(err) {
+            setSubmitting(false)
+            if(err.response.status === 401) {
+                setHasError(true)
+                setError([err.response.data.error])
+            }
+            else {
+                setHasError(true)
+                setError(["Oops! Something went wrong"])
+            }
+          }
     }
     return (
         <SafeAreaView style={styles.container}>
             <AntDesign name="left" size={24} color="black" onPress={() => navigation.goBack()}/>
             <View style={styles.headingContainer}>
                 <Text h3 h3Style={styles.headingText1}>Enter Verification Code</Text>
-                <Text style={styles.headingText2}>We have send you a verification code to your email address</Text>
+                <Text style={styles.headingText2}>We have send you a 4 digit verification code to your email address</Text>
             </View>
+            
+            {hasError && (
+                <View style={{backgroundColor: "#fb5151", padding: 8, margin: 12, borderRadius: 4}}>
+                {error.map((err, index) => (
+                    <Text key={index} style={{color: "white", fontSize: 16}}>{err}</Text>
+                ))}
+                </View>
+            )}
             <View style={styles.inputContainer}>
                 <View>
                     <Input 
@@ -39,7 +74,7 @@ const OTPVerification = () => {
                         maxLength={1}
                         ref={pin1Ref}
                         onChangeText={(text) => {
-                            setPin1(prevText => text)
+                            setPin1(text)
                             pin2Ref.current.focus()
                         }}
                     />

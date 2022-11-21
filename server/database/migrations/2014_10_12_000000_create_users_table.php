@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('image')->nullable();
             $table->string('gender');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->enum('role', ['CUSTOMER', 'BARBAR', 'ADMIN']);
             $table->boolean("is_approve")->default(false);
             $table->boolean("is_active")->default(false);

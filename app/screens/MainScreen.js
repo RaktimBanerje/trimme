@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View, Image, Text } from "react-native";
 
-const MainPage = () => {
+const MainScreen = () => {
   return (
     <View style={styles.mainPageView}>
       <View style={styles.rectangleView} />
@@ -451,4 +451,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainPage;
+export default MainScreen;

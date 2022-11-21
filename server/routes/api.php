@@ -19,10 +19,9 @@ use App\Http\Controllers\UserController;
 //     return $request->user();
 // });
 
-Route::post("/register", [UserController::class, 'register']);
-Route::post("/verify", [UserController::class, 'verify']);
-Route::post("/login", [UserController::class, 'login']);
-
+Route::post("/user/register", [UserController::class, 'register']);
+Route::post("/user/verify", [UserController::class, 'verify']);
+Route::post("/user/login", [UserController::class, 'login']);
 
 // Route::group([
 //     "name" => "user.",

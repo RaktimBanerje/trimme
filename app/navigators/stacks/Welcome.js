@@ -6,7 +6,9 @@ import Splash1 from '../../screens/Splash1';
 import Splash2 from '../../screens/Splash2';
 import SignupChoice from '../../screens/SignupChoice';
 import Signup from '../../screens/Signup';
-
+import EmailLogin from '../../screens/EmailLogin';
+import OTPVerification from '../../screens/OTPVerification';
+import MainScreen from '../../screens/MainScreen';
 
 export default function App() {
     const Stack = createNativeStackNavigator();
@@ -21,6 +23,9 @@ export default function App() {
                 <Stack.Screen name="Splash2" component={Splash2} />
                 <Stack.Screen name="SignupChoice" component={SignupChoice} />
                 <Stack.Screen name="Signup" component={Signup} />
+                <Stack.Screen name="EmailLogin" component={EmailLogin} />
+                <Stack.Screen name="OTPVerification" component={OTPVerification} />
+                <Stack.Screen name="MainScreen" component={MainScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

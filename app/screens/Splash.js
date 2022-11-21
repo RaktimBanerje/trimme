@@ -1,40 +1,67 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View, ActivityIndicator } from "react-native";
+import axios from "axios"
+import { REACT_APP_API_URI } from "@env"
 
 const Splash = ({navigation}) => {
 
   const [isTouch, setTouch] = React.useState(false)
-
-  // React.useEffect(() => {
-  //   (async () => {
-  //     try{
-  //       const isTouch = await AsyncStorage.getItem("isTouch")
-  //       if(isTouch) {
-  //         setTouch(true)
-  //       }
-  //       else {
-  //         await AsyncStorage.setItem("isTouch", true)
-  //       }
-  //     }
-  //     catch(err) {}
-  //   })()
-  // }, [])
-
-  // React.useEffect(() => {
-  //   if(isTouch) {
-  //     // Check is Logged in
-  //   }
-  //   else {
-  //     // Splash 1 Screen
-  //   }
-  // }, [isTouch])
+  const [isLoading, setLoading] = React.useState(true)
 
   React.useEffect(() => {
-    setTimeout(() => {
-      navigation.push("Splash1")
-    }, 4000)
+    (async () => {
+      try{
+        const isTouch = await AsyncStorage.getItem("isTouch")
+        if(isTouch == "Y") {
+          setTouch(true)
+        }
+        else {
+          await AsyncStorage.setItem("isTouch", "Y")
+        }
+      }
+      catch(err) {
+        setTouch(false)
+        setLoading(false)
+      }
+    })()
   }, [])
+
+  React.useEffect(() => {
+
+    if(isTouch) {
+      (async () => {
+        const token = await AsyncStorage.getItem("token")
+        if(token) {
+          try {
+            const response = await axios.post("/api/user/verify-token", {token})
+            if(response.status === 200) {
+              await AsyncStorage.setItem("user", JSON.stringify(response.data.user))
+              await AsyncStorage.setItem("token", response.status.token)
+              navigation.navigate("MainScreen")
+            }
+          }
+          catch(err) {
+            navigation.navigate("EmailLogin")
+          }
+        }
+        else {
+          navigation.navigate("EmailLogin")
+        }
+      })()
+    }
+    else {
+      if(!isLoading)
+        navigation.push("Splash1")
+    }
+
+  }, [isTouch, isLoading])
+
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     // navigation.push("Splash1")
+  //   }, 4000)
+  // }, [])
 
   return (
     <View style={styles.splashView}>
@@ -49,6 +76,11 @@ const Splash = ({navigation}) => {
         resizeMode="cover"
         source={require("../assets/logo-4-1.png")}
       />
+
+      <View style={{position: "absolute", top: 200, left: 160}}>
+        <ActivityIndicator size="large" color="black" />
+      </View>
+
     </View>
   );
 };

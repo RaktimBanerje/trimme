@@ -75,15 +75,16 @@ class UserController extends Controller
         $validation = Validator::make($input, [
             'role' => "required",
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'phone' => 'required|unique:users',
             'gender' => 'required',
-            'password' => 'required'
         ]);
 
         if($validation->fails()) {
             return response()->json(['errors' => $validation->errors()->all()], 400);
         }
+
+        $otp = mt_rand(1111,9999);
 
         $user = User::create([
             "role" => $request->role,
@@ -92,12 +93,37 @@ class UserController extends Controller
             "email" => $request->email,
             "phone" => $request->phone,
             "gender" => $request->gender,
-            "password" => bcrypt($request->password),
-            "address" => $request->address
+            "address" => $request->address,
+            "otp" => $otp
         ]);
 
         if($user) {
 
+            Mail::to($user)->send(new OTPVerification($user->name, $otp));
+
+            return response(["user" => $user]);
+        }
+        else {
+            return response(["user" => null], 500);
+        }
+    }
+
+
+    public function login (Request $request) {
+
+        $input = $request->all();
+
+        $validation = Validator::make($input, [
+            'email' => 'required|email',
+        ]);
+
+        if($validation->fails()) {
+            return response()->json(['errors' => $validation->errors()->all()], 400);
+        }
+
+        $user = User::where('email', $input["email"])->first();
+
+        if($user) {
             $otp = mt_rand(1111,9999);
 
             $user->otp = $otp;
@@ -105,10 +131,10 @@ class UserController extends Controller
 
             Mail::to($user)->send(new OTPVerification($user->name, $otp));
 
-            return response(["user" => $user, 'registered' => true]);
+            return response(["user" => $user]);
         }
         else {
-            return response(["user" => null, 'registered' => false], 500);
+            return response(["user" => null, 'token' => null, "error" => "Invalid email address"], 401);
         }
     }
 
@@ -124,41 +150,16 @@ class UserController extends Controller
                 $user->verified = true;
                 $user->save();
 
-                return response(["user" => $user, 'verified' => true]);
+                $token = $user->createToken('trimmeapp');
+
+                return response(["user" => $user, 'token' => $token->plainTextToken], 200);
             }
             else {
-                return response(["user" => null, "verified" => false]);
+                return response(["user" => null, "error" => "Invalid OTP"], 401);
             }
         }
         else {
-            return response(["user" => null, "verified" => false]);
-        }
-    }
-
-    public function login (Request $request) {
-        $input = $request->all();
-
-        $validation = Validator::make($input, [
-            'phone' => 'required',
-            'password' => 'required'
-        ]);
-
-        if($validation->fails()) {
-            return response()->json(['errors' => $validation->errors()->all()], 400);
-        }
-
-        if(Auth::attempt(["phone" => $input['phone'], "password" => $input['password']])) {
-            $user = Auth::user();
-
-            if(!$user->verified) {
-                return response(["user" => $user, 'error' => "You are not authenticated"], 401);
-            }
-
-            $token = $user->createToken('trimmeapp');
-
-            return response(["user" => $user, 'token' => $token->plainTextToken, "error" => false]);
-        }else {
-            return response(["user" => null, 'token' => null, "error" => "Invalid username or password"]);
+            return response(["user" => null], 400);
         }
     }
 }

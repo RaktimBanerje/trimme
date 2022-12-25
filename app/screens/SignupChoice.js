@@ -20,7 +20,7 @@ const SignupChoice = ({navigation}) => {
           height: 160,
           width: "40%",
           borderWidth: 1,
-          borderColor: "#f18836"
+          borderColor: "#0088E0"
         }}>
         <Image
           resizeMode="cover"
@@ -43,8 +43,8 @@ const SignupChoice = ({navigation}) => {
         height: 160,
         width: "40%",
         borderWidth: 1,
-        backgroundColor: "#f18836",
-        borderColor: "#f18836"
+        backgroundColor: "#0088E0",
+        borderColor: "#0088E0"
       }}>
         <Image
           resizeMode="cover"

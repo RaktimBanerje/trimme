@@ -18,28 +18,26 @@ const EmailLogin = ({navigation}) => {
   const send = async () => {
     setSubmitting(true)
     setHasError(false)
-    setError(false)
+    setError([])
     try {
-      const response = await axios.post(`${REACT_APP_API_URI}/api/user/login`, {email})
+      const response = await axios.post(`${process.env.REACT_APP_API_URI}/api/user/login`, {email})
       setSubmitting(false)
       if(response.status === 200) {
         navigation.navigate("OTPVerification", {email})
       }
     }
     catch(err) {
-      console.log(err)
       setSubmitting(false)
-      setError([])
+      setHasError(true)
+      console.log(err)
+      console.log(err.response.data.error)
       if(err.response.status === 400) {
-        setHasError(true)
         setError(err.response.data.errors)
       }
       else if (err.response.status === 401) {
-        setHasError(true)
         setError([err.response.data.error])
       }
       else {
-        setHasError(true)
         setError(["Oops, something went wrong"])
       }
     }
@@ -116,7 +114,7 @@ const styles = StyleSheet.create({
   primaryButtonStyle: {
     height: 55,
     borderRadius: 8,
-    backgroundColor: "#F18836"
+    backgroundColor: "#0088E0"
   },
   secondaryButtonStyle: {
     height: 55,

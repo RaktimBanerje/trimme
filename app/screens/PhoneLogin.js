@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   primaryButtonStyle: {
     height: 55,
     borderRadius: 8,
-    backgroundColor: "#F18836"
+    backgroundColor: "#0088E0"
   },
   secondaryButtonStyle: {
     height: 55,

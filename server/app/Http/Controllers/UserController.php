@@ -19,9 +19,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($role = null)
     {
-        //
+        if($role == null){
+            return response(["users" => User::all()]);
+        }
+        else {
+            return response(["users" => User::where("role", strtoupper($role))->get()]);
+        }
     }
 
     /**
@@ -108,7 +113,6 @@ class UserController extends Controller
         }
     }
 
-
     public function login (Request $request) {
 
         $input = $request->all();
@@ -161,5 +165,9 @@ class UserController extends Controller
         else {
             return response(["user" => null], 400);
         }
+    }
+
+    public function isAuthenticate () {
+        return response([],200);
     }
 }

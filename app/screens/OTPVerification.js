@@ -28,28 +28,37 @@ const OTPVerification = ({route, navigation}) => {
 
     const submit = async () => {
         setSubmitting(true)
-        const otp = `${pin1}${pin2}${pin3}${pin4}`
-        try {
-            setSubmitting(false)
-            const response = await axios.post(`${REACT_APP_API_URI}/api/user/verify`, {email, otp})
-            if(response.status === 200) {
-                await AsyncStorage.setItem("user", JSON.stringify(response.data.user))
-                await AsyncStorage.setItem("token", response.data.token)
-                navigation.navigate("MainScreen")
-            }
-          }
-          catch(err) {
-            setSubmitting(false)
-            if(err.response.status === 401) {
-                setHasError(true)
-                setError([err.response.data.error])
-            }
-            else {
-                setHasError(true)
-                setError(["Oops! Something went wrong"])
-            }
-          }
+
+        setTimeout(() => navigation.navigate("MainScreen"), 1000)
     }
+
+    // const submit = async () => {
+    //     setSubmitting(true)
+    //     setHasError(false)
+    //     setError([])
+    //     const otp = `${pin1}${pin2}${pin3}${pin4}`
+    //     try {
+    //         setSubmitting(false)
+    //         const response = await axios.post(`${REACT_APP_API_URI}/api/user/verify`, {email, otp})
+    //         if(response.status === 200) {
+    //             await AsyncStorage.setItem("user", JSON.stringify(response.data.user))
+    //             await AsyncStorage.setItem("token", response.data.token)
+    //             navigation.navigate("MainScreen")
+    //         }
+    //       }
+    //       catch(err) {
+    //         setSubmitting(false)
+    //         if(err.response.status === 401) {
+    //             setHasError(true)
+    //             setError([err.response.data.error])
+    //         }
+    //         else {
+    //             setHasError(true)
+    //             setError(["Oops! Something went wrong"])
+    //         }
+    //       }
+    // }
+
     return (
         <SafeAreaView style={styles.container}>
             <AntDesign name="left" size={24} color="black" onPress={() => navigation.goBack()}/>
@@ -162,7 +171,7 @@ const styles = StyleSheet.create({
     buttonStyle: {
         height: 55,
         borderRadius: 8,
-        backgroundColor: "#F18836",
+        backgroundColor: "#0088E0",
         marginTop: 10
     },
 })

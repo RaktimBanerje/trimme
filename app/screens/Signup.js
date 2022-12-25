@@ -51,6 +51,7 @@ const Signup = ({route, navigation}) => {
       setHasErr(false)
       setErr([])
       try {
+        console.log(formData)
         const response = await axios.post(`${REACT_APP_API_URI}/api/user/register`, formData)
         setSubmitting(false)
         navigation.navigate("OTPVerification", {email: formData.email})
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     borderRadius: 100,
-    backgroundColor: "#F18836"
+    backgroundColor: "#0088E0"
   },
   loginFrame: {
     flexDirection: "row", 
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
   buttonStyle: {
     height: 55,
     borderRadius: 8,
-    backgroundColor: "#F18836"
+    backgroundColor: "#0088E0"
   },
   dropdownContainer: {
     flexDirection: "column", 

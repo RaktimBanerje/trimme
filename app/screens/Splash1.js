@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   barberText: {
     textDecoration: "underline",
-    color: "#f18836",
+    color: "#0088E0",
   },
   yourNearestBarber: {
     margin: 0,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     top: 680,
     left: 255,
     borderRadius: 9,
-    backgroundColor: "#f18836",
+    backgroundColor: "#0088E0",
     flexDirection: "row",
     paddingHorizontal: 34,
     paddingVertical: 7,

@@ -51,8 +51,7 @@ const Signup = ({route, navigation}) => {
       setHasErr(false)
       setErr([])
       try {
-        console.log(formData)
-        const response = await axios.post(`${REACT_APP_API_URI}/api/user/register`, formData)
+        const response = await axios.post("https://digitalplutform.com/server/public/api/user/register", formData)
         setSubmitting(false)
         navigation.navigate("OTPVerification", {email: formData.email})
       }

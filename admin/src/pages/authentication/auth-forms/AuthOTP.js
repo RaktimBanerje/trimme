@@ -76,8 +76,8 @@ const AuthOTP = () => {
                                 token: response.token, 
                                 user: response.user
                             })
-                            localStorage.setItem("token", response.token)
-                            axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + response.token
+                            localStorage.setItem("token", response.data.token)
+                            axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token
                             navigate("/")
                         })
                         .catch(error => {

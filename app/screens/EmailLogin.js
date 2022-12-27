@@ -20,6 +20,7 @@ const EmailLogin = ({navigation}) => {
     setHasError(false)
     setError([])
     try {
+      console.log(`${process.env.REACT_APP_API_URI}/api/user/login`)
       const response = await axios.post(`${process.env.REACT_APP_API_URI}/api/user/login`, {email})
       setSubmitting(false)
       if(response.status === 200) {
@@ -30,12 +31,11 @@ const EmailLogin = ({navigation}) => {
       setSubmitting(false)
       setHasError(true)
       console.log(err)
-      console.log(err.response.data.error)
-      if(err.response.status === 400) {
-        setError(err.response.data.errors)
+      if(err?.response?.status === 400) {
+        setError(err?.response?.data?.errors)
       }
-      else if (err.response.status === 401) {
-        setError([err.response.data.error])
+      else if (err?.response?.status === 401) {
+        setError([err?.response?.data?.error])
       }
       else {
         setError(["Oops, something went wrong"])

@@ -30,10 +30,18 @@ Route::group([
     
 
     Route::get("/{role?}", [UserController::class, 'index']);
-
-
     Route::get("/is-authenticate", [UserController::class, 'isAuthenticate'])->name("isAuthenticate");
 });
+
+Route::group([
+    'middleware'    =>  'auth:sanctum',
+    'prefix'        =>  'shop',
+    'name'          =>  'shop.'
+], function () {
+    
+    
+});
+
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();

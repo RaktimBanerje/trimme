@@ -6,6 +6,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { AntDesign } from '@expo/vector-icons'; 
 import axios from 'axios';
 import * as  ImagePicker from 'expo-image-picker'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { REACT_APP_API_URI } from "@env"
 
 const Signup = ({route, navigation}) => {
@@ -25,6 +26,8 @@ const Signup = ({route, navigation}) => {
     phone: "",
     address: "",
     gender: "",
+    latitude: "",
+    longitude: "",
   })
 
   const data = [
@@ -146,14 +149,45 @@ const Signup = ({route, navigation}) => {
             errorStyle={styles.errorStyle}
             onChangeText={(text) => setData(formData => ({...formData, phone: text}))}
           />
-          <Input 
+        </View>
+      </ScrollView>
+
+      <GooglePlacesAutocomplete 
+        placeholder="Office address"
+        nearbyPlacesAPI='GooglePlacesSearch'
+        fetchDetails={true}
+        returnKeyType="search"
+        enablePoweredByContainer={false}
+        isRowScrollable={true}
+        query={{
+            key: "AIzaSyCQ2-Usbwfyygs-yYQoOGiKBzBD4P7wnZI",
+            language: 'en',
+        }}
+        debounce={400}
+        styles={inputStyles}
+        onPress={(data, details = null) => {
+          setData({...formData, 
+            address: data.description, 
+            latitude: details.geometry.location.lat,
+            longitude: details.geometry.location.lng
+          })
+        }}
+      />
+
+          {/* <Input 
             placeholder="Current Address"
             containerStyle={styles.containerStyle}
             inputContainerStyle={styles.inputContainerStyle}
             inputStyle={styles.inputStyle}
             errorStyle={styles.errorStyle}
             onChangeText={(text) => setData(formData => ({...formData, address: text}))}
-          />
+          /> */}
+
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <View>
           <View style={styles.dropdownContainer}>
             <Dropdown 
               data={data}
@@ -266,6 +300,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   
+})
+
+const inputStyles = StyleSheet.create({
+  container: {
+    marginTop: 10,
+    marginBottom: 20,
+    marginHorizontal: 10,
+    flex: 0
+  },
+  textInputContainer: {
+    paddingBottom: 0
+  },
+  textInput: {
+      backgroundColor: "white",
+      borderRadius: 8,
+      borderColor: "grey",
+      borderBottomWidth: 0.5,
+      borderWidth: 0.5,
+      fontSize: 18
+  }
 })
 
 export default Signup;

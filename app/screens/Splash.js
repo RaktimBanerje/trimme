@@ -40,6 +40,9 @@ const Splash = ({navigation}) => {
               await AsyncStorage.setItem("token", response.status.token)
               navigation.navigate("MainScreen")
             }
+            else {
+              navigation.navigate("EmailLogin")
+            }
           }
           catch(err) {
             navigation.navigate("EmailLogin")

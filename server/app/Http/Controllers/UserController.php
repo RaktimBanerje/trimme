@@ -99,6 +99,8 @@ class UserController extends Controller
             "phone" => $request->phone,
             "gender" => $request->gender,
             "address" => $request->address,
+            "latitude" => $request->latitude,
+            "longitude" => $request->longitude,
             "otp" => $otp
         ]);
 
@@ -133,7 +135,7 @@ class UserController extends Controller
             $user->otp = $otp;
             $user->save();
 
-            Mail::to($user)->send(new OTPVerification($user->name, $otp));
+            // Mail::to($user)->send(new OTPVerification($user->name, $otp));
 
             return response(["user" => $user]);
         }

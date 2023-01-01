@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,14 +34,18 @@ Route::group([
     Route::get("/is-authenticate", [UserController::class, 'isAuthenticate'])->name("isAuthenticate");
 });
 
-Route::group([
-    'middleware'    =>  'auth:sanctum',
-    'prefix'        =>  'shop',
-    'name'          =>  'shop.'
-], function () {
+
+Route::resource('shop', ShopController::class)->middleware("auth:sanctum");
+
+// Route::group([
+//     'middleware'    =>  'auth:sanctum',
+//     'prefix'        =>  'shop',
+//     'name'          =>  'shop.'
+// ], function () {
     
+//     Route::resource('photos', PhotoController::class)
     
-});
+// });
 
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -27,8 +27,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->enum('role', ['CUSTOMER', 'BARBAR', 'ADMIN']);
-            $table->boolean("is_approve")->default(false);
-            $table->boolean("is_active")->default(false);
+            $table->boolean("is_approve")->default(true);
+            $table->boolean("is_active")->default(true);
             $table->boolean("verified")->default(false);
             $table->string("otp")->nullable();
             $table->date("otp_expired_at")->nullable();

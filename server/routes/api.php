@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\ServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,7 @@ Route::group([
 
 
 Route::resource('shop', ShopController::class)->middleware("auth:sanctum");
+Route::resource('service', ServiceController::class)->middleware("auth:sanctum");
 
 // Route::group([
 //     'middleware'    =>  'auth:sanctum',

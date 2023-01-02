@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Validator;
 use Auth;
 
 class ServiceController extends Controller
@@ -15,7 +16,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //
+        return response(["services" => Service::all()]);
     }
 
     /**
@@ -38,14 +39,14 @@ class ServiceController extends Controller
             return response()->json(['errors' => $validation->errors()->all()], 400);
         }
         else {
-            $shop = Service::create([
+            $service = Service::create([
                 "user_id"     => Auth::user()->id,
                 "name"        => $request->name,
                 "description" => $request->description,
                 "price"       => $request->price,
             ]);
 
-            return response()->json(['shop' => $shop]);
+            return response()->json(['service' => $service]);
         }
     }
 

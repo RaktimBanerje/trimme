@@ -7,7 +7,7 @@ import { View } from 'react-native'
 
 const MainScreen = () => {
 
-  const [user, setUser] = React.useState({role: "BARBAR"})
+  const [user, setUser] = React.useState({role: "CUSTOMER"})
 
   // React.useEffect(() => {
   //   (async function () {

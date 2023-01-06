@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons';
 
 
-const MainScreen = () => {
+const MainScreen = ({navigation}) => {
   const [barbars, setBarbar] = React.useState([
     {
       id: "1",
@@ -78,7 +78,7 @@ const MainScreen = () => {
               <TouchableOpacity 
                 style={styles.itemContainer}
                 activeOpacity={1}
-                
+                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
               >
                   <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
                     <Avatar 
@@ -100,6 +100,7 @@ const MainScreen = () => {
               <TouchableOpacity 
                 style={styles.itemContainer}
                 activeOpacity={1}
+                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
               >
                   <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
                     <Avatar 
@@ -121,6 +122,7 @@ const MainScreen = () => {
               <TouchableOpacity 
                 style={styles.itemContainer}
                 activeOpacity={1}
+                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
               >
                   <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
                     <Avatar 
@@ -142,6 +144,7 @@ const MainScreen = () => {
               <TouchableOpacity 
                 style={styles.itemContainer}
                 activeOpacity={1}
+                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
               >
                   <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
                     <Avatar 
@@ -163,6 +166,7 @@ const MainScreen = () => {
               <TouchableOpacity 
                 style={styles.itemContainer}
                 activeOpacity={1}
+                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
               >
                   <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
                     <Avatar 

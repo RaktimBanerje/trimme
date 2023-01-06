@@ -33,6 +33,8 @@ const OTPVerification = ({route, navigation}) => {
     // }
 
      const submit = async () => {
+        navigation.navigate("MainScreen")
+        
          setSubmitting(true)
          setHasError(false)
          setError([])

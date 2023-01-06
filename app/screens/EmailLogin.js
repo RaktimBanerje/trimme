@@ -16,6 +16,7 @@ const EmailLogin = ({navigation}) => {
   const [error, setError] = React.useState([])
 
   const send = async () => {
+    navigation.navigate("OTPVerification", {email})
     setSubmitting(true)
     setHasError(false)
     setError([])

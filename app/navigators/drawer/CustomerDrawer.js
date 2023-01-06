@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { View } from 'react-native';
 import { Button } from '@rneui/base';
 import MainScreen from '../../screens/customer/MainScreen';
+import CustomerMainStack from '../stacks/customer/Main';
 
 const DrawerContent = (props) => {
 
@@ -26,18 +27,16 @@ const CustomerDrawer = () => {
     const Drawer = createDrawerNavigator()
 
     return (
-        <NavigationContainer>
-            <Drawer.Navigator 
-                drawerContent={(props) => <DrawerContent {...props} />}
-                initialRouteName={"Home"} 
-                screenOptions={{
-                    headerStatusBarHeight: 25,
-                }}
-            >
-                <Drawer.Screen name="Home" component={MainScreen} />
-                <Drawer.Screen name="Home1" component={MainScreen} />
-            </Drawer.Navigator>
-        </NavigationContainer>
+        <Drawer.Navigator 
+            drawerContent={(props) => <DrawerContent {...props} />}
+            initialRouteName={"Home"} 
+            screenOptions={{
+                headerStatusBarHeight: 25,
+            }}
+        >
+            <Drawer.Screen name="Home" component={CustomerMainStack} />
+            <Drawer.Screen name="Home1" component={CustomerMainStack} />
+        </Drawer.Navigator>
     )
 }
 

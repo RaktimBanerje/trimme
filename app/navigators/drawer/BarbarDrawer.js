@@ -27,20 +27,18 @@ const BarbarDrawer = () => {
     const Drawer = createDrawerNavigator()
     
     return (
-        <NavigationContainer>
-            <Drawer.Navigator 
-                drawerContent={(props) => <DrawerContent {...props} />}
-                initialRouteName={"Home"} 
-                screenOptions={{
-                    headerStatusBarHeight: 25,
-                }}
-            >
+        <Drawer.Navigator 
+            drawerContent={(props) => <DrawerContent {...props} />}
+            initialRouteName={"Home"} 
+            screenOptions={{
+                headerStatusBarHeight: 25,
+            }}
+        >
 
-                <Drawer.Screen name="Home" component={MainScreen} />
-                <Drawer.Screen name="Profile" component={BarbarProfile} />
+            <Drawer.Screen name="Home" component={MainScreen} />
+            <Drawer.Screen name="Profile" component={BarbarProfile} />
 
-            </Drawer.Navigator>
-        </NavigationContainer>
+        </Drawer.Navigator>
     )
 }
 

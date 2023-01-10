@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shop;
+use App\Models\Service;
+use App\Models\ShopReview;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
@@ -16,7 +18,14 @@ class ShopController extends Controller
      */
     public function index()
     {
-        return response(["shops" => Shop::all()]);
+        $shops = Shop::all();
+
+        for($i = 0; $i<count($shops); $i++) {
+            $shops[$i]->star = number_format(ShopReview::where("shop_id", $shops[$i]->id)->avg("star"), 1);
+            $shops[$i]->reviews = ShopReview::where("shop_id", $shops[$i]->id)->count("star");
+        }
+
+        return response(["shops" => $shops]);
     }
 
     /**
@@ -61,7 +70,11 @@ class ShopController extends Controller
      */
     public function show(Shop $shop)
     {
-        //
+        $shop["services"] = Service::where("shop_id", $shop->id)->get();
+        $shop["customerReviews"] = ShopReview::where("shop_id", $shop->id)->get();
+        $shop["portfolios"] = [];
+
+        return response()->json(['shop' => $shop]);
     }
 
     /**

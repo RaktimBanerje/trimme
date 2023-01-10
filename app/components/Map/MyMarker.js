@@ -9,9 +9,6 @@ const MyMarker = ({place, identifier}) => {
                 latitude: place.coords.latitude,
                 longitude: place.coords.longitude,
             }}
-            title={identifier}
-            description={place.description}
-            identifier={identifier}
             pinColor="black"
         />
     )

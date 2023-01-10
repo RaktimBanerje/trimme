@@ -14,9 +14,17 @@ class ServiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response(["services" => Service::all()]);
+
+        $shop_id = $request->query('shop');
+
+        if($shop_id) {
+            return response(["services" => Service::where('shop_id', $shop_id)->get()]);
+        }
+        else {
+            return response(["services" => Service::all()]);
+        }
     }
 
     /**
@@ -40,7 +48,7 @@ class ServiceController extends Controller
         }
         else {
             $service = Service::create([
-                "user_id"     => Auth::user()->id,
+                "shop_id"     => $request->shop_id,
                 "name"        => $request->name,
                 "description" => $request->description,
                 "price"       => $request->price,

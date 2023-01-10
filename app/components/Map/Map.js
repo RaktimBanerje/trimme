@@ -5,7 +5,7 @@ import MyMapViewDirection from './MyMapViewDirection'
 import MyMarker from './MyMarker'
 import { isEqual } from 'lodash'
 
-const Map = () => {
+const Map = ({places}) => {
 
     const { width, height } = Dimensions.get('window')
     const ASPECT_RATIO = width / height
@@ -42,6 +42,7 @@ const Map = () => {
             showsMyLocationButton
             showsUserLocation
         >
+            {places.map((place, index) => <MyMarker place={{}}/>)}
         </MapView>
     )
 }

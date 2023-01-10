@@ -22,6 +22,11 @@ class CreateShopsTable extends Migration
             $table->string("address");
             $table->string("latitude");
             $table->string("longitude");
+            $table->boolean("is_approve")->default(true);
+            $table->boolean("is_active")->default(true);
+            $table->boolean("is_open")->default(false);
+            $table->time("open_at")->nullable();
+            $table->time("close_at")->nullable();
             $table->timestamps();
         });
     }

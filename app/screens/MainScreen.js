@@ -1,25 +1,16 @@
 import React from 'react'
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Text } from '@rneui/base'
 import BarbarDrawer from '../navigators/drawer/BarbarDrawer'
 import CustomerDrawer from '../navigators/drawer/CustomerDrawer'
-import { View } from 'react-native'
+import { StoreContext } from '../App'
 
 const MainScreen = () => {
 
-  const [user, setUser] = React.useState({role: "CUSTOMER"})
-
-  // React.useEffect(() => {
-  //   (async function () {
-  //     let user = await AsyncStorage.getItem("user")
-  //     setUser(JSON.parse(user))
-  //   })()
-  // }, [])
+  const {state, setState} = React.useContext(StoreContext)
 
   return (
     <>
-      {user!=null && user.role == "BARBAR" && <BarbarDrawer />}
-      {user!=null && user.role == "CUSTOMER" && <CustomerDrawer />}
+      {state.user!=null && state.user.role == "BARBAR" && <BarbarDrawer />}
+      {state.user!=null && state.user.role == "CUSTOMER" && <CustomerDrawer />}
     </>
   )
 }

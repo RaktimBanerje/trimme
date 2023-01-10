@@ -5,8 +5,7 @@ import SafeAreaView from 'react-native-safe-area-view'
 import { AntDesign } from '@expo/vector-icons'; 
 import { Feather } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import axios from 'axios';
-import { REACT_APP_API_URI } from "@env"
+import axios from "../utils/index";
 
 const EmailLogin = ({navigation}) => {
 
@@ -16,13 +15,11 @@ const EmailLogin = ({navigation}) => {
   const [error, setError] = React.useState([])
 
   const send = async () => {
-    navigation.navigate("OTPVerification", {email})
     setSubmitting(true)
     setHasError(false)
     setError([])
     try {
-      console.log(`${process.env.REACT_APP_API_URI}/api/user/login`)
-      const response = await axios.post(`${process.env.REACT_APP_API_URI}/api/user/login`, {email})
+      const response = await axios.post(`/user/login`, {email})
       setSubmitting(false)
       if(response.status === 200) {
         navigation.navigate("OTPVerification", {email})

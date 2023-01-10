@@ -3,11 +3,12 @@ import { Button, Input, Text } from "@rneui/base"
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons'; 
-import axios from "axios"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { REACT_APP_API_URI } from "@env"
+import axios from "../utils/index"
+import { StoreContext } from '../App';
 
 const OTPVerification = ({route, navigation}) => {
+    
+    const {state, setState} = React.useContext(StoreContext)
 
     const {email} = route.params
 
@@ -33,19 +34,16 @@ const OTPVerification = ({route, navigation}) => {
     // }
 
      const submit = async () => {
-        navigation.navigate("MainScreen")
-        
          setSubmitting(true)
          setHasError(false)
          setError([])
          const otp = `${pin1}${pin2}${pin3}${pin4}`
          try {
              setSubmitting(false)
-             const response = await axios.post(`${REACT_APP_API_URI}/api/user/verify`, {email, otp})
-             if(response.status === 200) {
-                 await AsyncStorage.setItem("user", JSON.stringify(response.data.user))
-                 await AsyncStorage.setItem("token", response.data.token)
-                 navigation.navigate("MainScreen")
+             const response = await axios.post('/user/verify', {email, otp})
+             if(response.status === 200) {                
+                setState(state => ({...state, user: response.data.user, token: response.data.token}))
+                navigation.navigate("MainScreen")
              }
            }
            catch(err) {

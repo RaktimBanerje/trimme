@@ -1,8 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as React from "react";
 import { Image, StyleSheet, View, ActivityIndicator } from "react-native";
-import axios from "axios"
-import { REACT_APP_API_URI } from "@env"
+import axios from "../utils/index"
 
 const Splash = ({navigation}) => {
 
@@ -28,13 +27,12 @@ const Splash = ({navigation}) => {
   }, [])
 
   React.useEffect(() => {
-
     if(isTouch) {
       (async () => {
         const token = await AsyncStorage.getItem("token")
         if(token) {
           try {
-            const response = await axios.post("/api/user/verify-token", {token})
+            const response = await axios.post("/user/verify", {token})
             if(response.status === 200) {
               await AsyncStorage.setItem("user", JSON.stringify(response.data.user))
               await AsyncStorage.setItem("token", response.status.token)
@@ -57,7 +55,6 @@ const Splash = ({navigation}) => {
       if(!isLoading)
         navigation.push("Splash1")
     }
-
   }, [isTouch, isLoading])
 
   // React.useEffect(() => {

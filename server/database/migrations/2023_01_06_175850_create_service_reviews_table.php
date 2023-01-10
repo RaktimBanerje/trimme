@@ -3,9 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Shop;
+use App\Models\User;
+use App\Models\Service;
 
-class CreateServicesTable extends Migration
+class CreateServiceReviewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +15,12 @@ class CreateServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('service_reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Shop::class);
-            $table->string("name");
-            $table->text("description");
-            $table->float("price");
-            $table->boolean("is_active")->default(true);
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Service::class);
+            $table->integer("star");
+            $table->text("feedback");
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateServicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('service_reviews');
     }
 }

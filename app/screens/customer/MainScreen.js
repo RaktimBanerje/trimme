@@ -3,8 +3,9 @@ import React from 'react'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Map from "../../components/Map/Map"
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons';
+import axios from '../../utils'
+import { FlatList } from 'react-native-gesture-handler'
 
 
 const MainScreen = ({navigation}) => {
@@ -17,30 +18,51 @@ const MainScreen = ({navigation}) => {
     }
   ])
 
-  const [shops, setShops] = React.useState([
-    {
-        id: 1,
-        user_id: 1,
-        image: "",
-        name: "Trim Me Shop",
-        address: "29E/1 Rammohan Mukherjee Lane",
-        latitude: "22.56",
-        longitude: "22.89",
-        created_at: "2023-01-01T18:35:57.000000Z",
-        updated_at: "2023-01-01T18:35:57.000000Z"
-    },
-    {
-        id: 3,
-        user_id: 2,
-        image: "",
-        name: "Serenity Salon",
-        address: "29E/1 Rammohan Mukherjee Lane",
-        latitude: "28.56",
-        longitude: "30.89",
-        created_at: "2023-01-02T20:49:26.000000Z",
-        updated_at: "2023-01-02T20:49:26.000000Z"
-    }
-])
+  const [loadig, setLoading] = React.useState(false)
+  const [shops, setShops] = React.useState([])
+
+  React.useEffect(() => {
+    setLoading(true)
+    axios.get("/shop")
+    .then(response => {
+      if(response.status  == 200) {
+        setShops(response.data.shops)
+      }
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.status)
+      }
+    })
+    .finally(() => setLoading(false))
+  }, [])
+
+  const Shop = ({item}) => {
+    return (
+      <TouchableOpacity 
+        style={styles.itemContainer}
+        activeOpacity={1}
+        onPress={() => navigation.navigate("ShopScreen", {id: item.id})}
+      >
+          <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
+            <Avatar 
+              size={70}
+              rounded
+              source={require("../../assets/logo.png")}
+            />
+
+            <View>
+              <Text style={{fontSize: 20, marginLeft: 10}}>{item.name}</Text>
+              <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center"}}>
+                <AntDesign name="star" size={18} color="#F9B53F" />
+                <Text>{item.star} ({item.reviews} reviews)</Text>
+              </View>
+            </View>
+          </View>
+          <Text style={{fontSize: 20}}>$79</Text>
+      </TouchableOpacity>
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -71,120 +93,13 @@ const MainScreen = ({navigation}) => {
           <Map />
         </View>
         <View style={styles.shopsContainer}>
-          <ScrollView
+          <FlatList 
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
-          >
-              <TouchableOpacity 
-                style={styles.itemContainer}
-                activeOpacity={1}
-                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
-              >
-                  <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
-                    <Avatar 
-                      size={70}
-                      rounded
-                      source={require("../../assets/logo.png")}
-                    />
-                    <View>
-                      <Text style={{fontSize: 20, marginLeft: 10}}>Serenity Salon</Text>
-                      <View style={{flexDirection: "row", justifyContent: "flex-end", alignItems: "center"}}>
-                        <AntDesign name="star" size={18} color="#F9B53F" />
-                        <Text>4.1 (123 reviews)</Text>
-                      </View>
-                    </View>
-                  </View>
-                  <Text style={{fontSize: 20}}>$79</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={styles.itemContainer}
-                activeOpacity={1}
-                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
-              >
-                  <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
-                    <Avatar 
-                      size={70}
-                      rounded
-                      source={require("../../assets/logo.png")}
-                    />
-                    <View>
-                      <Text style={{fontSize: 20, marginLeft: 10}}>Serenity Salon</Text>
-                      <View style={{flexDirection: "row", justifyContent: "flex-end", alignItems: "center"}}>
-                        <AntDesign name="star" size={18} color="#F9B53F" />
-                        <Text>4.1 (123 reviews)</Text>
-                      </View>
-                    </View>
-                  </View>
-                  <Text style={{fontSize: 20}}>$79</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={styles.itemContainer}
-                activeOpacity={1}
-                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
-              >
-                  <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
-                    <Avatar 
-                      size={70}
-                      rounded
-                      source={require("../../assets/logo.png")}
-                    />
-                    <View>
-                      <Text style={{fontSize: 20, marginLeft: 10}}>Serenity Salon</Text>
-                      <View style={{flexDirection: "row", justifyContent: "flex-end", alignItems: "center"}}>
-                        <AntDesign name="star" size={18} color="#F9B53F" />
-                        <Text>4.1 (123 reviews)</Text>
-                      </View>
-                    </View>
-                  </View>
-                  <Text style={{fontSize: 20}}>$79</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={styles.itemContainer}
-                activeOpacity={1}
-                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
-              >
-                  <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
-                    <Avatar 
-                      size={70}
-                      rounded
-                      source={require("../../assets/logo.png")}
-                    />
-                    <View>
-                      <Text style={{fontSize: 20, marginLeft: 10}}>Serenity Salon</Text>
-                      <View style={{flexDirection: "row", justifyContent: "flex-end", alignItems: "center"}}>
-                        <AntDesign name="star" size={18} color="#F9B53F" />
-                        <Text>4.1 (123 reviews)</Text>
-                      </View>
-                    </View>
-                  </View>
-                  <Text style={{fontSize: 20}}>$79</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={styles.itemContainer}
-                activeOpacity={1}
-                onPress={() => navigation.navigate("ShopScreen", {id: 1})}
-              >
-                  <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: "center"}}>
-                    <Avatar 
-                      size={70}
-                      rounded
-                      source={require("../../assets/logo.png")}
-                    />
-                    <View>
-                      <Text style={{fontSize: 20, marginLeft: 10}}>Serenity Salon</Text>
-                      <View style={{flexDirection: "row", justifyContent: "flex-end", alignItems: "center"}}>
-                        <AntDesign name="star" size={18} color="#F9B53F" />
-                        <Text>4.1 (123 reviews)</Text>
-                      </View>
-                    </View>
-                  </View>
-                  <Text style={{fontSize: 20}}>$79</Text>
-              </TouchableOpacity>
-          </ScrollView>
+            data={shops}
+            renderItem={Shop}
+            keyExtractor={item => item.id}
+          />
         </View>
     </View>
   )

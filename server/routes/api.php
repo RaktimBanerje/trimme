@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ShopReviewController;
+use App\Http\Controllers\ServiceReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +39,10 @@ Route::group([
 
 
 Route::resource('shop', ShopController::class)->middleware("auth:sanctum");
+Route::resource('shop-review', ShopReviewController::class)->middleware("auth:sanctum");
+
 Route::resource('service', ServiceController::class)->middleware("auth:sanctum");
+Route::resource('service-review', ServiceReviewController::class)->middleware("auth:sanctum");
 
 // Route::group([
 //     'middleware'    =>  'auth:sanctum',
